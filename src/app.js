@@ -1,4 +1,5 @@
 let alertShown = false;
+let setIntervalID;
 
 function cardGenerator() {
   let numbers = [
@@ -37,7 +38,27 @@ function cardGenerator() {
     randomSuit === "♦" || randomSuit === "♥" ? "#dc3545" : "";
 
   console.log(`Your card is ${randomNumber} of ${randomSuit}`);
+}
 
+function showAlert(message, type) {
+  const alertContainer = document.getElementById("alertContainer");
+  alertContainer.className = `alert alert-${type} alert-dismissible fade show`;
+  alertContainer.role = "alert";
+  alertContainer.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+}
+
+function startInterval() {
+  setIntervalID = setInterval(cardGenerator, 10000);
+}
+
+function stopInterval() {
+  clearInterval(setIntervalID);
+}
+
+document.querySelector(".btn").addEventListener("click", function() {
+  cardGenerator();
+  stopInterval();
+  startInterval();
   if (!alertShown) {
     showAlert(
       "If you don't like your card it will automatically generate another one every 10 seconds or you can press the button, too.",
@@ -45,15 +66,4 @@ function cardGenerator() {
     );
     alertShown = true;
   }
-}
-
-function showAlert(message, type) {
-  const alertContainer = document.getElementById("alertContainer");
-  const alertDiv = document.createElement("div");
-  alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-  alertDiv.role = "alert";
-  alertDiv.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-  alertContainer.appendChild(alertDiv);
-}
-
-setInterval(cardGenerator, 10000);
+});
